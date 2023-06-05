@@ -27,6 +27,7 @@ function App(props) {
 
   const [rolledValues, setRolledValues] = useState([]);
 
+  const [proficiencies, setProficiencies] = useState([]);
   const [selectedProficiencies, setSelectedProficiencies] = useState([]);
   const [proficiencyAmount, setProficiencyAmount] = useState(0);
 
@@ -38,6 +39,7 @@ function App(props) {
     if (selectedClass) {
       getProficiencies(selectedClass);
       getProficiencyAmount(selectedClass);
+      setSelectedProficiencies([]);
     }
   }, [selectedClass])
 
@@ -63,6 +65,8 @@ function App(props) {
   function setClass(e) {
     setSelectedClass(e.target.value);
     getSubclasses(e.target.value);
+    getProficiencies(e.target.value);
+    getProficiencyAmount(e.target.value);
   }
 
   async function getSubraces(race) {
@@ -90,6 +94,10 @@ function App(props) {
   async function getModifier(e) {
     const stat = e.target.textContent;
 
+    if (!stat) {
+      return;
+    }
+
     fetch(API_URL + "GetModifier/" + stat)
       .then(response => response.json())
       .then(modifier => {
@@ -111,7 +119,7 @@ function App(props) {
   async function getProficiencies(selectedClass) {
     fetch(API_URL + "GetProficiencies/" + selectedClass)
       .then(response => response.json())
-      .then((json) => setSelectedProficiencies(json));
+      .then((json) => setProficiencies(json));
   }
 
   async function getProficiencyAmount(selectedClass) {
@@ -120,33 +128,46 @@ function App(props) {
       .then((amount) => setProficiencyAmount(amount));
   }
 
-  function handleProficiencyChange(event) {
-    const { value } = event.target;
-    setSelectedClass(value);
-  }
-
   function handleCheckboxChange(event) {
     const { value, checked } = event.target;
     if (checked) {
-      setSelectedProficiencies((prevProficiencies) => [...prevProficiencies, value]);
+      if (selectedProficiencies.length < proficiencyAmount) {
+        setSelectedProficiencies((prevProficiencies) => [...prevProficiencies, value]);
+      }
     } else {
-      setSelectedProficiencies((prevProficiencies) => prevProficiencies.filter((proficiency) => proficiency !== value));
+      setSelectedProficiencies((prevProficiencies) =>
+        prevProficiencies.filter((proficiency) => proficiency !== value)
+      );
     }
   }
+
+  function handleStatInputChange(e) {
+    let statValue = parseInt(e.target.textContent) || 0;
+
+    if (statValue < 3 || statValue > 20) {
+      statValue = 10;
+    }
+
+    e.target.textContent = statValue;
+
+    getModifier(e);
+   }
 
   function renderProficiencyTable() {
     const rows = [];
     const columns = 3;
 
+    const columnWidth = `${100 / columns}%`;
+
     for (let i = 0; i < proficiencyOptions.length; i += columns) {
       const row = proficiencyOptions.slice(i, i + columns).map((option) => (
-        <td key={option}>
+        <td key={option} style={{ width: columnWidth }}>
           <label>
             <input 
               type="checkbox"
               value={option}
               checked={selectedProficiencies.includes(option)}
-              disabled={selectedProficiencies.length >= proficiencyAmount && !selectedProficiencies.includes(option)}
+              disabled={!proficiencies.includes(option) || (selectedProficiencies.length >= proficiencyAmount && !selectedProficiencies.includes(option))}
               onChange={handleCheckboxChange}
             />
             {option}
@@ -157,10 +178,34 @@ function App(props) {
     }
 
     return (
-      <table>
+      <table style={{ width: '100%' }}>
         <tbody>{rows}</tbody>
       </table>
     );
+  }
+
+  function generateFileContent() {
+    const content = 'This is the content of the text file.';
+
+    return content;
+  }
+
+  function downloadCharacterFile() {
+    const content = generateFileContent();
+    const filename = 'custom-filename.txt';
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   }
 
   return (
@@ -222,48 +267,48 @@ function App(props) {
           <div class="stat">
             <label class="statlabel">Strength</label>
             <div class="statpoint">
-              <div class="oval-text" contentEditable="true" onInput={getModifier}>18</div>
-              <div class="square-text">+4</div>
+              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div class="square-text">+0</div>
             </div>
           </div>
 
           <div class="stat">
             <label class="statlabel">Dexterity</label>
             <div class="statpoint">
-              <div class="oval-text" contentEditable="true" onInput={getModifier}>18</div>
-              <div class="square-text">+4</div>
+              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div class="square-text">+0</div>
             </div>
           </div>
 
           <div class="stat">
             <label class="statlabel">Constitution</label>
             <div class="statpoint">
-              <div class="oval-text" contentEditable="true">18</div>
-              <div class="square-text">+4</div>
+              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div class="square-text">+0</div>
             </div>
           </div>
 
           <div class="stat">
             <label class="statlabel">Intelligence</label>
             <div class="statpoint">
-              <div class="oval-text" contentEditable="true">18</div>
-              <div class="square-text">+4</div>
+              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div class="square-text">+0</div>
             </div>
           </div>
 
           <div class="stat">
             <label class="statlabel">Wisdom</label>
             <div class="statpoint">
-              <div class="oval-text" contentEditable="true">18</div>
-              <div class="square-text">+4</div>
+              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div class="square-text">+0</div>
             </div>
           </div>
 
           <div class="stat">
             <label class="statlabel">Charisma</label>
             <div class="statpoint">
-              <div class="oval-text" contentEditable="true">18</div>
-              <div class="square-text">+4</div>
+              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div class="square-text">+0</div>
             </div>
           </div>
         </div>
@@ -292,6 +337,9 @@ function App(props) {
         </div>
       </details>
       
+      <hr></hr>
+
+      <button onClick={downloadCharacterFile}>Download character file</button>
     </div>
   );
 }
