@@ -338,10 +338,8 @@ function App(props) {
       </details>
       
       <hr></hr>
-
-      <button onClick={downloadCharacterFile}>Download character file</button>
-
-      <div>Hoi</div>
+      
+      {/*<button onClick={downloadCharacterFile}>Download character file</button>*/}
     </div>
   );
 }
