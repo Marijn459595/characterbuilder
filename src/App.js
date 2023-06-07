@@ -339,7 +339,7 @@ function App(props) {
       
       <hr></hr>
       
-      {/*<button onClick={downloadCharacterFile}>Download character file</button>*/}
+      <button onClick={downloadCharacterFile}>Download character file</button>
     </div>
   );
 }
