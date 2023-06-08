@@ -331,6 +331,10 @@ function App(props) {
         )}
 
         <hr></hr>
+        
+        {selectedClass && (
+          <label class="middlealign">Choose a total of {proficiencyAmount} proficiencies</label>
+        )}
 
         <div>
           {renderProficiencyTable()}
@@ -339,7 +343,7 @@ function App(props) {
       
       <hr></hr>
       
-      <button onClick={downloadCharacterFile}>Download character file</button>
+      {/*<button onClick={downloadCharacterFile}>Download character file</button>*/}
     </div>
   );
 }
