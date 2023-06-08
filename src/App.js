@@ -1,5 +1,7 @@
 import './App.css';
 import React, {useState, useEffect} from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const API_URL ="https://localhost:7187/api/Builder/";
 
@@ -208,6 +210,23 @@ function App(props) {
     window.URL.revokeObjectURL(url);
   }
 
+  function confirmDownload() {
+    confirmAlert({
+      title: "Confirmation",
+      message: "Are you sure you want to download the character file?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => downloadCharacterFile()
+        },
+        {
+          label: "No",
+          onClick: () => {}
+        }
+      ]
+    });
+  }
+
   return (
     <div class="container">
       <header>
@@ -360,7 +379,7 @@ function App(props) {
       
       <hr></hr>
       
-      {/*<button onClick={downloadCharacterFile}>Download character file</button>*/}
+      {/*<button onClick={confirmDownload}>Download character file</button>*/}
     </div>
   );
 }
