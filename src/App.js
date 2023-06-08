@@ -209,7 +209,7 @@ function App(props) {
   }
 
   return (
-    <div class="middlealign">
+    <div class="container">
       <header>
         <h1 class="title">
           Dungeons & Dragons character builder
@@ -263,6 +263,7 @@ function App(props) {
 
       <details class="detailsbar" open>
         <summary class="detailslabel">Stats</summary>
+        <hr></hr>
         <div class="statpointcollection">
           <div class="stat">
             <label class="statlabel">Strength</label>
@@ -313,7 +314,7 @@ function App(props) {
           </div>
         </div>
 
-        <div style={{ marginTop: '30px' }}></div>
+        <div style={{ marginTop: '20px' }}></div>
 
         {rolledValues.length == 0 && (
           <div class="middlealign">
@@ -321,24 +322,40 @@ function App(props) {
           </div>
         )}
         {rolledValues.length > 0 && (
-          <div class="statpointcollection">
-            {rolledValues.map((value, index) => (
-              <div class="stat" key={index}>
-                <div class="rolledstat">{value}</div>
-              </div>
-            ))}
+          <div>
+            <label class="middlealign">These are the stats you rolled</label>
+            <label class="middlealign">Distribute these over your stats as you see fit</label>
+
+            <div style={{ marginTop: '10px' }}></div>
+
+            <div class="statpointcollection">
+              {rolledValues.map((value, index) => (
+                <div class="stat" key={index}>
+                  <div class="rolledstat">{value}</div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
+        <hr class="line"></hr>
+      </details>
 
+      <details class="detailsbar" open>
+        <summary class="detailslabel">Proficiencies</summary>
         <hr></hr>
         
         {selectedClass && (
-          <label class="middlealign">Choose a total of {proficiencyAmount} proficiencies</label>
+          <div>
+            <label class="middlealign">Choose a total of {proficiencyAmount} proficiencies ({selectedProficiencies.length}/{proficiencyAmount})</label>
+            <label class="middlealign">Which proficiencies you can choose and the amount are determined by your class</label>
+            <div style={{ marginTop: '7px' }}></div>
+          </div>
         )}
 
         <div>
           {renderProficiencyTable()}
         </div>
+        <hr class="line"></hr>
       </details>
       
       <hr></hr>
