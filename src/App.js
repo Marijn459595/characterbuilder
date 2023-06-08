@@ -144,7 +144,7 @@ function App(props) {
   function handleStatInputChange(e) {
     let statValue = parseInt(e.target.textContent) || 0;
 
-    if (statValue < 3 || statValue > 20) {
+    if (statValue < 1 || statValue > 20) {
       statValue = 10;
     }
 
