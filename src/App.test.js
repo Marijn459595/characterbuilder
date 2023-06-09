@@ -1,8 +1,143 @@
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from './App';
+import { server } from './setupServer';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+const API_URL = "https://localhost:7187/api/Builder/"
+
+console.error = jest.fn().mockImplementation((warning) => {
+    if (warning.includes('contentEditable')) {
+        return;
+    }
+    console.error(warning);
+});
+
+describe('App component', () => {
+    test('renders race dropdown', () => {
+        render(<App />);
+        const raceDropdown = screen.getByLabelText('Race:');
+        expect(raceDropdown).toBeInTheDocument();
+    });
+
+    test('selects a race and renders subrace dropdown', async () => {
+        render(<App />);
+        const raceDropdown = screen.getByLabelText('Race:');
+
+        let races;
+        await fetch(API_URL + "Races")
+            .then(response => response.json())
+            .then((json) => races = json);
+        console.log(races);
+
+        fireEvent.change(raceDropdown, { target: { value: 'Dwarf' } });
+        /*fireEvent.click(raceDropdown);
+        const dwarfOption = screen.getByText('Dwarf');
+        console.log(raceDropdown.value);
+        fireEvent.click(dwarfOption);*/
+
+        //expect(raceDropdown).toHaveValue('Dwarf');
+
+        const subraceDropdown = await screen.findByLabelText('Subrace:');
+        expect(subraceDropdown).toBeInTheDocument();
+    });
+
+    test('renders class dropdown', () => {
+        render(<App />);
+        const classDropdown = screen.getByLabelText('Class:');
+        expect(classDropdown).toBeInTheDocument();
+    });
+
+    test('selects a class and renders subclass dropdown', async () => {
+        render(<App />);
+        const classDropdown = screen.getByLabelText('Class:');
+
+        let classes;
+        await fetch(API_URL + "Classes")
+            .then(response => response.json())
+            .then((json) => classes = json);
+        console.log(classes);
+
+        fireEvent.change(classDropdown, { target: { value: 'Barbarian' } });
+
+        const subclassDropdown = await screen.findByLabelText('Subclass:');
+        expect(subclassDropdown).toBeInTheDocument();
+    });
+
+    test('rolls stats and displays rolled values', async () => {
+        render(<App />);
+        const rollStatsButton = screen.getByRole('button', { name: 'Roll stats' });
+
+        fireEvent.click(rollStatsButton);
+        const rolledStats = await screen.findAllByTestId('rolled-stat');
+        expect(rolledStats).toHaveLength(6);
+    });
+
+    test('selects class and checks if proficiencies are displayed correctly', async () => {
+        render(<App />);
+        const classDropdown = screen.getByLabelText('Class:');
+
+        let classes;
+        await fetch(API_URL + "Classes")
+            .then(response => response.json())
+            .then((json) => classes = json);
+        console.log(classes);
+
+        fireEvent.change(classDropdown, { target: { value: 'Barbarian' } });
+
+        const allowedProficiencies = ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"];
+
+        const proficiencyCheckboxes = screen.getAllByTestId('proficiency-checkbox');
+
+        proficiencyCheckboxes.forEach((checkbox) => {
+            const proficiencyName = checkbox.getAttribute('data-testid');
+
+            if (allowedProficiencies.includes(proficiencyName)) {
+                expect(checkbox).toBeEnabled();
+            } else {
+                expect(checkbox).toBeDisabled();
+            }
+        });
+    })
+
+    test('selects class and the max amount of proficiencies, then checks if selecting more proficiencies is allowed', async () => {
+        render(<App />);
+        const classDropdown = screen.getByLabelText('Class:');
+
+        let classes;
+        await fetch(API_URL + "Classes")
+            .then(response => response.json())
+            .then((json) => classes = json);
+        console.log(classes);
+
+        fireEvent.change(classDropdown, { target: { value: 'Barbarian' } });
+
+        const proficiencyCheckboxes = screen.getAllByTestId('proficiency-checkbox');
+
+        const chosenProficiencies = ["Athletics", "Perception"];
+
+        fireEvent.click(proficiencyCheckboxes.find((checkbox) => checkbox.value === chosenProficiencies[0]));
+        fireEvent.click(proficiencyCheckboxes.find((checkbox) => checkbox.value === chosenProficiencies[1]));
+
+        proficiencyCheckboxes.forEach((checkbox) => {
+            const proficiencyName = checkbox.getAttribute('data-testid');
+
+            if (chosenProficiencies.includes(proficiencyName)) {
+                expect(checkbox).toBeEnabled();
+            } else {
+                expect(checkbox).toBeDisabled();
+            }
+        });
+    })
+
+    test('checks if proficiency checkboxes all start disabled when no class has been selected', async () => {
+        render(<App />);
+        const proficiencyCheckboxes = screen.getAllByTestId('proficiency-checkbox');
+        proficiencyCheckboxes.forEach((checkbox) => {
+            expect(checkbox).toBeDisabled();
+        });
+    })
 });
