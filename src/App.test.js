@@ -27,11 +27,11 @@ describe('App component', () => {
         render(<App />);
         const raceDropdown = screen.getByLabelText('Race:');
 
-        let races;
-        await fetch(API_URL + "Races")
-            .then(response => response.json())
-            .then((json) => races = json);
-        console.log(races);
+        fireEvent.click(raceDropdown);
+
+        await waitFor(() => {
+            expect(screen.getByText('Dwarf', { selector: 'option' })).toBeInTheDocument();
+        })
 
         fireEvent.change(raceDropdown, { target: { value: 'Dwarf' } });
         /*fireEvent.click(raceDropdown);
@@ -55,11 +55,11 @@ describe('App component', () => {
         render(<App />);
         const classDropdown = screen.getByLabelText('Class:');
 
-        let classes;
-        await fetch(API_URL + "Classes")
-            .then(response => response.json())
-            .then((json) => classes = json);
-        console.log(classes);
+        fireEvent.click(classDropdown);
+
+        await waitFor(() => {
+            expect(screen.getByText('Barbarian', { selector: 'option' })).toBeInTheDocument();
+        })
 
         fireEvent.change(classDropdown, { target: { value: 'Barbarian' } });
 
@@ -101,7 +101,7 @@ describe('App component', () => {
                 expect(checkbox).toBeDisabled();
             }
         });
-    })
+    });
 
     test('selects class and the max amount of proficiencies, then checks if selecting more proficiencies is allowed', async () => {
         render(<App />);
@@ -131,7 +131,7 @@ describe('App component', () => {
                 expect(checkbox).toBeDisabled();
             }
         });
-    })
+    });
 
     test('checks if proficiency checkboxes all start disabled when no class has been selected', async () => {
         render(<App />);
@@ -139,5 +139,5 @@ describe('App component', () => {
         proficiencyCheckboxes.forEach((checkbox) => {
             expect(checkbox).toBeDisabled();
         });
-    })
+    });
 });

@@ -34,7 +34,8 @@ function App(props) {
   const [proficiencyAmount, setProficiencyAmount] = useState(0);
 
   useEffect(() => {
-    getRaces().then(getClasses());
+    getRaces();
+    getClasses();
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -46,16 +47,26 @@ function App(props) {
   }, [selectedClass])
 
   async function getRaces() {
-    fetch(API_URL + "Races")
-      .then(response => response.json())
-      .then((json) => SetRaces(json));
+    let URL = API_URL + "Races";
+    console.log(URL);
+    const response = await fetch(URL);
+    const json = await response.json();
+    SetRaces(json);
+    //fetch(URL)
+      //.then(response => response.json())
+      //.then((json) => SetRaces(json));
     console.log(races);
   }
 
   async function getClasses() {
-    fetch(API_URL + "Classes")
-      .then(response => response.json())
-      .then((json) => SetClasses(json));
+    let URL = API_URL + "Classes";
+    console.log(URL);
+    const response = await fetch(URL);
+    const json = await response.json();
+    SetClasses(json);
+    //fetch(URL)
+      //.then(response => response.json())
+      //.then((json) => SetClasses(json));
     console.log(classes);
   }
 
@@ -74,14 +85,21 @@ function App(props) {
   }
 
   async function getSubraces(race) {
-    fetch(API_URL + "Subraces/" + race)
-      .then(response => response.json())
-      .then((json) => SetSubraces(json));
+    let URL = API_URL + "Subraces/" + race;
+    console.log(URL);
+    const response = await fetch(URL);
+    const json = await response.json();
+    SetSubraces(json);
+    //fetch(URL)
+      //.then(response => response.json())
+      //.then((json) => SetSubraces(json));
     console.log(subraces);
   }
 
   async function getSubclasses(_class) {
-    fetch(API_URL + "Subclasses/" + _class)
+    let URL = API_URL + "Subclasses/" + _class;
+    console.log(URL);
+    fetch(URL)
       .then(response => response.json())
       .then((json) => SetSubclasses(json));
     console.log(subclasses);
@@ -102,7 +120,10 @@ function App(props) {
       return;
     }
 
-    fetch(API_URL + "GetModifier/" + stat)
+    let URL = API_URL + "GetModifier/" + stat;
+    console.log(URL);
+
+    fetch(URL)
       .then(response => response.json())
       .then(modifier => {
         const squareTextElement = e.target.nextElementSibling;
@@ -113,7 +134,9 @@ function App(props) {
   async function rollStats() {
     const newValues = [];
     for (let i = 0; i < 6; i++) {
-      const response = await fetch(API_URL + "RollStat");
+      let URL = API_URL + "RollStat";
+      console.log(URL);
+      const response = await fetch(URL);
       const text = await response.text();
       newValues.push(text);
     }
@@ -121,13 +144,17 @@ function App(props) {
   }
 
   async function getProficiencies(selectedClass) {
-    fetch(API_URL + "GetProficiencies/" + selectedClass)
+    let URL = API_URL + "GetProficiencies/" + selectedClass;
+    console.log(URL);
+    fetch(URL)
       .then(response => response.json())
       .then((json) => setProficiencies(json));
   }
 
   async function getProficiencyAmount(selectedClass) {
-    fetch(API_URL + "GetProficiencyAmount/" + selectedClass)
+    let URL = API_URL + "GetProficiencyAmount/" + selectedClass;
+    console.log(URL);
+    fetch(URL)
       .then(response => response.json())
       .then((amount) => setProficiencyAmount(amount));
   }
