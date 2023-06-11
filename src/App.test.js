@@ -80,11 +80,11 @@ describe('App component', () => {
         render(<App />);
         const classDropdown = screen.getByLabelText('Class:');
 
-        let classes;
-        await fetch(API_URL + "Classes")
-            .then(response => response.json())
-            .then((json) => classes = json);
-        console.log(classes);
+        fireEvent.click(classDropdown);
+
+        await waitFor(() => {
+            expect(screen.getByText('Barbarian', { selector: 'option' })).toBeInTheDocument();
+        })
 
         fireEvent.change(classDropdown, { target: { value: 'Barbarian' } });
 
@@ -107,11 +107,11 @@ describe('App component', () => {
         render(<App />);
         const classDropdown = screen.getByLabelText('Class:');
 
-        let classes;
-        await fetch(API_URL + "Classes")
-            .then(response => response.json())
-            .then((json) => classes = json);
-        console.log(classes);
+        fireEvent.click(classDropdown);
+
+        await waitFor(() => {
+            expect(screen.getByText('Barbarian', { selector: 'option' })).toBeInTheDocument();
+        })
 
         fireEvent.change(classDropdown, { target: { value: 'Barbarian' } });
 
