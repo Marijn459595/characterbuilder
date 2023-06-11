@@ -10,3 +10,5 @@ window.URL.createObjectURL = function () {};
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
+
+jest.spyOn(window, "close").mockImplementation(jest.fn());
