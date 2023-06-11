@@ -48,26 +48,26 @@ function App(props) {
 
   async function getRaces() {
     let URL = API_URL + "Races";
-    console.log(URL);
+    //console.log(URL);
     const response = await fetch(URL);
     const json = await response.json();
     SetRaces(json);
     //fetch(URL)
       //.then(response => response.json())
       //.then((json) => SetRaces(json));
-    console.log(races);
+    //console.log(races);
   }
 
   async function getClasses() {
     let URL = API_URL + "Classes";
-    console.log(URL);
+    //console.log(URL);
     const response = await fetch(URL);
     const json = await response.json();
     SetClasses(json);
     //fetch(URL)
       //.then(response => response.json())
       //.then((json) => SetClasses(json));
-    console.log(classes);
+    //console.log(classes);
   }
 
   function setRace(e) {
@@ -86,23 +86,23 @@ function App(props) {
 
   async function getSubraces(race) {
     let URL = API_URL + "Subraces/" + race;
-    console.log(URL);
+    //console.log(URL);
     const response = await fetch(URL);
     const json = await response.json();
     SetSubraces(json);
     //fetch(URL)
       //.then(response => response.json())
       //.then((json) => SetSubraces(json));
-    console.log(subraces);
+    //console.log(subraces);
   }
 
   async function getSubclasses(_class) {
     let URL = API_URL + "Subclasses/" + _class;
-    console.log(URL);
+    //console.log(URL);
     fetch(URL)
       .then(response => response.json())
       .then((json) => SetSubclasses(json));
-    console.log(subclasses);
+    //console.log(subclasses);
   }
 
   function setSubrace(e) {
@@ -121,7 +121,7 @@ function App(props) {
     }
 
     let URL = API_URL + "GetModifier/" + stat;
-    console.log(URL);
+    //console.log(URL);
 
     fetch(URL)
       .then(response => response.json())
@@ -135,7 +135,7 @@ function App(props) {
     const newValues = [];
     for (let i = 0; i < 6; i++) {
       let URL = API_URL + "RollStat";
-      console.log(URL);
+      //console.log(URL);
       const response = await fetch(URL);
       const text = await response.text();
       newValues.push(text);
@@ -145,7 +145,7 @@ function App(props) {
 
   async function getProficiencies(selectedClass) {
     let URL = API_URL + "GetProficiencies/" + selectedClass;
-    console.log(URL);
+    //console.log(URL);
     fetch(URL)
       .then(response => response.json())
       .then((json) => setProficiencies(json));
@@ -153,7 +153,7 @@ function App(props) {
 
   async function getProficiencyAmount(selectedClass) {
     let URL = API_URL + "GetProficiencyAmount/" + selectedClass;
-    console.log(URL);
+    //console.log(URL);
     fetch(URL)
       .then(response => response.json())
       .then((amount) => setProficiencyAmount(amount));
