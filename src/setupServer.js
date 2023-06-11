@@ -64,6 +64,25 @@ const server = setupServer(
             ctx.status(200),
             ctx.json(2)
         );
+    }),
+    rest.get(API_URL + 'GetProficiencies/', (req, res, ctx) => {
+        return res(
+            ctx.status(200),
+            ctx.json([
+                "Animal Handling",
+                "Athletics",
+                "Intimidation",
+                "Nature",
+                "Perception",
+                "Survival"
+              ])
+        );
+    }),
+    rest.get(API_URL + 'GetProficiencyAmount/', (req, res, ctx) => {
+        return res(
+            ctx.status(200),
+            ctx.json(2)
+        );
     })
 );
 
