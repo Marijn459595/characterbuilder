@@ -19,5 +19,8 @@ jobs:
       - name: Install
         run: npm install
       
-      - name: run tests
-        run: npm test
+      - name: Run Cypress UI test
+        uses: cypress-io/github-action@v2
+        with:
+          command: npx cypress run
+          browser: edge
