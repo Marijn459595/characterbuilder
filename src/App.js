@@ -34,7 +34,8 @@ function App(props) {
   const [proficiencyAmount, setProficiencyAmount] = useState(0);
 
   useEffect(() => {
-    getRaces().then(getClasses());
+    getRaces();
+    getClasses();
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -46,43 +47,62 @@ function App(props) {
   }, [selectedClass])
 
   async function getRaces() {
-    fetch(API_URL + "Races")
-      .then(response => response.json())
-      .then((json) => SetRaces(json));
-    console.log(races);
+    let URL = API_URL + "Races";
+    //console.log(URL);
+    const response = await fetch(URL);
+    const json = await response.json();
+    SetRaces(json);
+    //fetch(URL)
+      //.then(response => response.json())
+      //.then((json) => SetRaces(json));
+    //console.log(races);
   }
 
   async function getClasses() {
-    fetch(API_URL + "Classes")
-      .then(response => response.json())
-      .then((json) => SetClasses(json));
-    console.log(classes);
+    let URL = API_URL + "Classes";
+    //console.log(URL);
+    const response = await fetch(URL);
+    const json = await response.json();
+    SetClasses(json);
+    //fetch(URL)
+      //.then(response => response.json())
+      //.then((json) => SetClasses(json));
+    //console.log(classes);
   }
 
   function setRace(e) {
     setSelectedRace(e.target.value);
+    setSelectedSubrace("");
     getSubraces(e.target.value);
   }
 
   function setClass(e) {
     setSelectedClass(e.target.value);
+    setSelectedSubclass("");
     getSubclasses(e.target.value);
     getProficiencies(e.target.value);
     getProficiencyAmount(e.target.value);
   }
 
   async function getSubraces(race) {
-    fetch(API_URL + "Subraces/" + race)
-      .then(response => response.json())
-      .then((json) => SetSubraces(json));
-    console.log(subraces);
+    let URL = API_URL + "Subraces/" + race;
+    //console.log(URL);
+    const response = await fetch(URL);
+    const json = await response.json();
+    SetSubraces(json);
+    //fetch(URL)
+      //.then(response => response.json())
+      //.then((json) => SetSubraces(json));
+    //console.log(subraces);
   }
 
   async function getSubclasses(_class) {
-    fetch(API_URL + "Subclasses/" + _class)
+    let URL = API_URL + "Subclasses/" + _class;
+    //console.log(URL);
+    fetch(URL)
       .then(response => response.json())
       .then((json) => SetSubclasses(json));
-    console.log(subclasses);
+    //console.log(subclasses);
   }
 
   function setSubrace(e) {
@@ -100,7 +120,10 @@ function App(props) {
       return;
     }
 
-    fetch(API_URL + "GetModifier/" + stat)
+    let URL = API_URL + "GetModifier/" + stat;
+    //console.log(URL);
+
+    fetch(URL)
       .then(response => response.json())
       .then(modifier => {
         const squareTextElement = e.target.nextElementSibling;
@@ -111,7 +134,9 @@ function App(props) {
   async function rollStats() {
     const newValues = [];
     for (let i = 0; i < 6; i++) {
-      const response = await fetch(API_URL + "RollStat");
+      let URL = API_URL + "RollStat";
+      //console.log(URL);
+      const response = await fetch(URL);
       const text = await response.text();
       newValues.push(text);
     }
@@ -119,13 +144,17 @@ function App(props) {
   }
 
   async function getProficiencies(selectedClass) {
-    fetch(API_URL + "GetProficiencies/" + selectedClass)
+    let URL = API_URL + "GetProficiencies/" + selectedClass;
+    //console.log(URL);
+    fetch(URL)
       .then(response => response.json())
       .then((json) => setProficiencies(json));
   }
 
   async function getProficiencyAmount(selectedClass) {
-    fetch(API_URL + "GetProficiencyAmount/" + selectedClass)
+    let URL = API_URL + "GetProficiencyAmount/" + selectedClass;
+    //console.log(URL);
+    fetch(URL)
       .then(response => response.json())
       .then((amount) => setProficiencyAmount(amount));
   }
@@ -167,10 +196,12 @@ function App(props) {
           <label>
             <input 
               type="checkbox"
+              data-testid="proficiency-checkbox"
               value={option}
               checked={selectedProficiencies.includes(option)}
               disabled={!proficiencies.includes(option) || (selectedProficiencies.length >= proficiencyAmount && !selectedProficiencies.includes(option))}
               onChange={handleCheckboxChange}
+              key={option}
             />
             {option}
           </label>
@@ -228,28 +259,28 @@ function App(props) {
   }
 
   return (
-    <div class="container">
+    <div className="container">
       <header>
-        <h1 class="title">
+        <h1 className="title">
           Dungeons & Dragons character builder
         </h1>
       </header>
-      <div class="dropdown">
-        <label class="dropdownlabel">Race: </label>
-        <select class="dropdown" onChange={setRace}>
-          <option value="" selected disabled hidden></option>
+      <div className="dropdown">
+        <label htmlFor="raceDropdown" className="dropdownlabel">Race: </label>
+        <select id="raceDropdown" className="dropdown" onChange={setRace} value={selectedRace}>
+          <option value="" disabled hidden defaultValue></option>
           {
-            races.map(race => <option>{race}</option>)
+            races.map((race, index) => <option key={index}>{race}</option>)
           }
         </select>
       </div>
       {selectedRace && subraces.length > 0 &&
-        <div class="dropdown">
-          <label class="dropdownlabel">Subrace: </label>
-          <select class="dropdown" onChange={setSubrace}>
-            <option value="" selected disabled hidden></option>
+        <div className="dropdown">
+          <label htmlFor="subraceDropdown" className="dropdownlabel">Subrace: </label>
+          <select id="subraceDropdown" className="dropdown" onChange={setSubrace} value={selectedSubrace}>
+            <option value="" disabled hidden defaultValue></option>
             {
-              subraces.map(subrace => <option>{subrace}</option>)
+              subraces.map((subrace, index) => <option key={index}>{subrace}</option>)
             }
           </select>
         </div>
@@ -257,22 +288,22 @@ function App(props) {
 
       <hr></hr>
 
-      <div class="dropdown">
-        <label class="dropdownlabel">Class: </label>
-        <select class="dropdown" onChange={setClass}>
-          <option value="" selected disabled hidden></option>
+      <div className="dropdown">
+        <label htmlFor="classDropdown" className="dropdownlabel">Class: </label>
+        <select id="classDropdown" className="dropdown" onChange={setClass} value={selectedClass}>
+          <option value="" disabled hidden defaultValue></option>
           {
-            classes.map(_class => <option>{_class}</option>)
+            classes.map((_class, index) => <option key={index}>{_class}</option>)
           }
         </select>
       </div>
       {selectedClass && subclasses.length > 0 &&
-        <div class="dropdown">
-          <label class="dropdownlabel">Subclass: </label>
-          <select class="dropdown" onChange={setSubclass}>
-            <option value="" selected disabled hidden></option>
+        <div className="dropdown">
+          <label htmlFor="subclassDropdown" className="dropdownlabel">Subclass: </label>
+          <select id="subclassDropdown" className="dropdown" onChange={setSubclass} value={selectedSubclass}>
+            <option value="" disabled hidden defaultValue></option>
             {
-              subclasses.map(subclass => <option>{subclass}</option>)
+              subclasses.map((subclass, index) => <option key={index}>{subclass}</option>)
             }
           </select>
         </div>
@@ -280,55 +311,55 @@ function App(props) {
 
       <hr></hr>
 
-      <details class="detailsbar" open>
-        <summary class="detailslabel">Stats</summary>
+      <details className="detailsbar" open>
+        <summary className="detailslabel">Stats</summary>
         <hr></hr>
-        <div class="statpointcollection">
-          <div class="stat">
-            <label class="statlabel">Strength</label>
-            <div class="statpoint">
-              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
-              <div class="square-text">+0</div>
+        <div className="statpointcollection">
+          <div className="stat">
+            <label className="statlabel">Strength</label>
+            <div className="statpoint">
+              <div className="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div className="square-text">+0</div>
             </div>
           </div>
 
-          <div class="stat">
-            <label class="statlabel">Dexterity</label>
-            <div class="statpoint">
-              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
-              <div class="square-text">+0</div>
+          <div className="stat">
+            <label className="statlabel">Dexterity</label>
+            <div className="statpoint">
+              <div className="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div className="square-text">+0</div>
             </div>
           </div>
 
-          <div class="stat">
-            <label class="statlabel">Constitution</label>
-            <div class="statpoint">
-              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
-              <div class="square-text">+0</div>
+          <div className="stat">
+            <label className="statlabel">Constitution</label>
+            <div className="statpoint">
+              <div className="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div className="square-text">+0</div>
             </div>
           </div>
 
-          <div class="stat">
-            <label class="statlabel">Intelligence</label>
-            <div class="statpoint">
-              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
-              <div class="square-text">+0</div>
+          <div className="stat">
+            <label className="statlabel">Intelligence</label>
+            <div className="statpoint">
+              <div className="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div className="square-text">+0</div>
             </div>
           </div>
 
-          <div class="stat">
-            <label class="statlabel">Wisdom</label>
-            <div class="statpoint">
-              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
-              <div class="square-text">+0</div>
+          <div className="stat">
+            <label className="statlabel">Wisdom</label>
+            <div className="statpoint">
+              <div className="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div className="square-text">+0</div>
             </div>
           </div>
 
-          <div class="stat">
-            <label class="statlabel">Charisma</label>
-            <div class="statpoint">
-              <div class="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
-              <div class="square-text">+0</div>
+          <div className="stat">
+            <label className="statlabel">Charisma</label>
+            <div className="statpoint">
+              <div className="oval-text" contentEditable="true" onBlur={handleStatInputChange}>10</div>
+              <div className="square-text">+0</div>
             </div>
           </div>
         </div>
@@ -336,37 +367,37 @@ function App(props) {
         <div style={{ marginTop: '20px' }}></div>
 
         {rolledValues.length == 0 && (
-          <div class="middlealign">
+          <div className="middlealign">
             <button onClick={rollStats}>Roll stats</button>
           </div>
         )}
         {rolledValues.length > 0 && (
           <div>
-            <label class="middlealign">These are the stats you rolled</label>
-            <label class="middlealign">Distribute these over your stats as you see fit</label>
+            <label className="middlealign">These are the stats you rolled</label>
+            <label className="middlealign">Distribute these over your stats as you see fit</label>
 
             <div style={{ marginTop: '10px' }}></div>
 
-            <div class="statpointcollection">
+            <div className="statpointcollection">
               {rolledValues.map((value, index) => (
-                <div class="stat" key={index}>
-                  <div class="rolledstat">{value}</div>
+                <div className="stat" key={index}>
+                  <div data-testid="rolled-stat" className="rolledstat">{value}</div>
                 </div>
               ))}
             </div>
           </div>
         )}
-        <hr class="line"></hr>
+        <hr className="line"></hr>
       </details>
 
-      <details class="detailsbar" open>
-        <summary class="detailslabel">Proficiencies</summary>
+      <details className="detailsbar" open>
+        <summary className="detailslabel">Proficiencies</summary>
         <hr></hr>
         
         {selectedClass && (
           <div>
-            <label class="middlealign">Choose a total of {proficiencyAmount} proficiencies ({selectedProficiencies.length}/{proficiencyAmount})</label>
-            <label class="middlealign">Which proficiencies you can choose and the amount are determined by your class</label>
+            <label className="middlealign">Choose a total of {proficiencyAmount} proficiencies ({selectedProficiencies.length}/{proficiencyAmount})</label>
+            <label className="middlealign">Which proficiencies you can choose and the amount are determined by your class</label>
             <div style={{ marginTop: '7px' }}></div>
           </div>
         )}
@@ -374,7 +405,7 @@ function App(props) {
         <div>
           {renderProficiencyTable()}
         </div>
-        <hr class="line"></hr>
+        <hr className="line"></hr>
       </details>
       
       <hr></hr>
