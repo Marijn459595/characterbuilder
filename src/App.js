@@ -218,14 +218,21 @@ function App(props) {
   }
 
   function generateFileContent() {
-    const content = 'This is the content of the text file.';
+    let content = "Race: " + selectedRace;
+
+    if (selectedSubrace)
+    {
+      content += "\nSubrace: " + selectedSubrace;
+    }
+
+    content += "\nClass: " + selectedClass + "\nSubclass: " + selectedSubclass;
 
     return content;
   }
 
   function downloadCharacterFile() {
     const content = generateFileContent();
-    const filename = 'custom-filename.txt';
+    const filename = 'character.txt';
 
     const blob = new Blob([content], { type: 'text/plain' });
     const url = window.URL.createObjectURL(blob);
@@ -410,7 +417,9 @@ function App(props) {
       
       <hr></hr>
       
-      {/*<button onClick={confirmDownload}>Download character file</button>*/}
+      {selectedRace && selectedClass && selectedSubclass && (subraces.length === 0 || selectedSubrace) && (
+        <button onClick={confirmDownload}>Download character file</button>
+      )}
     </div>
   );
 }
