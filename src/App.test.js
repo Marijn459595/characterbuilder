@@ -140,8 +140,4 @@ describe('App component', () => {
             expect(checkbox).toBeDisabled();
         });
     });
-
-    /*test('checks literally nothing', async () => {
-
-    });*/
 }); 
