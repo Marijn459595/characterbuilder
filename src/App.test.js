@@ -34,12 +34,6 @@ describe('App component', () => {
         })
 
         fireEvent.change(raceDropdown, { target: { value: 'Dwarf' } });
-        /*fireEvent.click(raceDropdown);
-        const dwarfOption = screen.getByText('Dwarf');
-        console.log(raceDropdown.value);
-        fireEvent.click(dwarfOption);*/
-
-        //expect(raceDropdown).toHaveValue('Dwarf');
 
         const subraceDropdown = await screen.findByLabelText('Subrace:');
         expect(subraceDropdown).toBeInTheDocument();
