@@ -48,26 +48,16 @@ function App(props) {
 
   async function getRaces() {
     let URL = API_URL + "Races";
-    //console.log(URL);
     const response = await fetch(URL);
     const json = await response.json();
     SetRaces(json);
-    //fetch(URL)
-      //.then(response => response.json())
-      //.then((json) => SetRaces(json));
-    //console.log(races);
   }
 
   async function getClasses() {
     let URL = API_URL + "Classes";
-    //console.log(URL);
     const response = await fetch(URL);
     const json = await response.json();
     SetClasses(json);
-    //fetch(URL)
-      //.then(response => response.json())
-      //.then((json) => SetClasses(json));
-    //console.log(classes);
   }
 
   function setRace(e) {
@@ -86,23 +76,16 @@ function App(props) {
 
   async function getSubraces(race) {
     let URL = API_URL + "Subraces/" + race;
-    //console.log(URL);
     const response = await fetch(URL);
     const json = await response.json();
     SetSubraces(json);
-    //fetch(URL)
-      //.then(response => response.json())
-      //.then((json) => SetSubraces(json));
-    //console.log(subraces);
   }
 
   async function getSubclasses(_class) {
     let URL = API_URL + "Subclasses/" + _class;
-    //console.log(URL);
     fetch(URL)
       .then(response => response.json())
       .then((json) => SetSubclasses(json));
-    //console.log(subclasses);
   }
 
   function setSubrace(e) {
@@ -121,7 +104,6 @@ function App(props) {
     }
 
     let URL = API_URL + "GetModifier/" + stat;
-    //console.log(URL);
 
     fetch(URL)
       .then(response => response.json())
@@ -135,7 +117,6 @@ function App(props) {
     const newValues = [];
     for (let i = 0; i < 6; i++) {
       let URL = API_URL + "RollStat";
-      //console.log(URL);
       const response = await fetch(URL);
       const text = await response.text();
       newValues.push(text);
@@ -145,7 +126,6 @@ function App(props) {
 
   async function getProficiencies(selectedClass) {
     let URL = API_URL + "GetProficiencies/" + selectedClass;
-    //console.log(URL);
     fetch(URL)
       .then(response => response.json())
       .then((json) => setProficiencies(json));
@@ -153,7 +133,6 @@ function App(props) {
 
   async function getProficiencyAmount(selectedClass) {
     let URL = API_URL + "GetProficiencyAmount/" + selectedClass;
-    //console.log(URL);
     fetch(URL)
       .then(response => response.json())
       .then((amount) => setProficiencyAmount(amount));
@@ -277,7 +256,7 @@ function App(props) {
         <select id="raceDropdown" className="dropdown" onChange={setRace} value={selectedRace}>
           <option value="" disabled hidden defaultValue></option>
           {
-            races.map((race, index) => <option key={index}>{race}</option>)
+            races.map((race) => <option key={race}>{race}</option>)
           }
         </select>
       </div>
@@ -287,7 +266,7 @@ function App(props) {
           <select id="subraceDropdown" className="dropdown" onChange={setSubrace} value={selectedSubrace}>
             <option value="" disabled hidden defaultValue></option>
             {
-              subraces.map((subrace, index) => <option key={index}>{subrace}</option>)
+              subraces.map((subrace) => <option key={subrace}>{subrace}</option>)
             }
           </select>
         </div>
@@ -300,7 +279,7 @@ function App(props) {
         <select id="classDropdown" className="dropdown" onChange={setClass} value={selectedClass}>
           <option value="" disabled hidden defaultValue></option>
           {
-            classes.map((_class, index) => <option key={index}>{_class}</option>)
+            classes.map((_class) => <option key={_class}>{_class}</option>)
           }
         </select>
       </div>
@@ -310,7 +289,7 @@ function App(props) {
           <select id="subclassDropdown" className="dropdown" onChange={setSubclass} value={selectedSubclass}>
             <option value="" disabled hidden defaultValue></option>
             {
-              subclasses.map((subclass, index) => <option key={index}>{subclass}</option>)
+              subclasses.map((subclass) => <option key={subclass}>{subclass}</option>)
             }
           </select>
         </div>
@@ -387,7 +366,7 @@ function App(props) {
 
             <div className="statpointcollection">
               {rolledValues.map((value, index) => (
-                <div className="stat" key={index}>
+                <div className="stat" key={index}> {/* NOSONAR */ /* This issue "don't use array index as key" is ignored because there is no other unique identifier and I do not specifically need a unique identifier. */}
                   <div data-testid="rolled-stat" className="rolledstat">{value}</div>
                 </div>
               ))}
