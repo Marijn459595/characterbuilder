@@ -6,11 +6,11 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 const API_URL ="https://localhost:7187/api/Builder/";
 
 const proficiencyOptions = [
-  "Acrobatics", "Animal Handling", "Arcana", "Athletics",
-  "Deception", "History", "Insight", "Intimidation",
-  "Investigation", "Medicine", "Nature", "Perception",
-  "Performance", "Persuasion", "Religion", "Sleight of Hand",
-  "Stealth", "Survival"
+  "Acrobatics (Dex)", "Animal Handling (Wis)", "Arcana (Int)", "Athletics (Str)",
+  "Deception (Cha)", "History (Int)", "Insight (Wis)", "Intimidation (Cha)",
+  "Investigation (Int)", "Medicine (Wis)", "Nature (Int)", "Perception (Wis)",
+  "Performance (Cha)", "Persuasion (Cha)", "Religion (Int)", "Sleight of Hand (Dex)",
+  "Stealth (Dex)", "Survival (Wis)"
 ];
 
 function App(props) {
@@ -361,7 +361,7 @@ function App(props) {
         <div style={{ marginTop: '20px' }}></div>
 
         {rolledValues.length == 0 && (
-          <div className="statButtons">
+          <div className="statButtons" style={{ marginTop: '25px' }}>
             <button className="statButton" onClick={rollStats}>Roll stats</button>
             <button className = "statButton" onClick={standardArray}>Standard Array</button>
           </div>
@@ -408,6 +408,7 @@ function App(props) {
       {selectedRace && selectedClass && selectedSubclass && (subraces.length === 0 || selectedSubrace) && (
         <button onClick={confirmDownload}>Download character file</button>
       )}
+      <button onClick={() => window.location.reload(false)}>Make a new character</button>
     </div>
   );
 }
