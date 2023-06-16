@@ -120,6 +120,19 @@
   text-align: center;
 }
 
+.statButtons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.statButton {
+  width: 120px;
+  height: 25px;
+  margin-left: 5px;
+}
+
 .detailsbar {
   align-content: left;
   justify-content: left;
