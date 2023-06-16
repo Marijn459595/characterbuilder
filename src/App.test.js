@@ -82,7 +82,7 @@ describe('App component', () => {
 
         fireEvent.change(classDropdown, { target: { value: 'Barbarian' } });
 
-        const allowedProficiencies = ["Animal Handling", "Athletics", "Intimidation", "Nature", "Perception", "Survival"];
+        const allowedProficiencies = ["Animal Handling (Wis)", "Athletics (Str)", "Intimidation (Cha)", "Nature (Int)", "Perception (Wis)", "Survival (Wis)"];
 
         const proficiencyCheckboxes = screen.getAllByTestId('proficiency-checkbox');
 
@@ -111,7 +111,7 @@ describe('App component', () => {
 
         const proficiencyCheckboxes = screen.getAllByTestId('proficiency-checkbox');
 
-        const chosenProficiencies = ["Athletics", "Perception"];
+        const chosenProficiencies = ["Athletics (Str)", "Perception (Wis)"];
 
         fireEvent.click(proficiencyCheckboxes.find((checkbox) => checkbox.value === chosenProficiencies[0]));
         fireEvent.click(proficiencyCheckboxes.find((checkbox) => checkbox.value === chosenProficiencies[1]));
