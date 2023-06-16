@@ -111,7 +111,7 @@ describe('App component', () => {
 
         const proficiencyCheckboxes = screen.getAllByTestId('proficiency-checkbox');
 
-        const chosenProficiencies = ["Athletics", "Perception"];
+        const chosenProficiencies = ["Athletics (Str)", "Perception (Wis)"];
 
         fireEvent.click(proficiencyCheckboxes.find((checkbox) => checkbox.value === chosenProficiencies[0]));
         fireEvent.click(proficiencyCheckboxes.find((checkbox) => checkbox.value === chosenProficiencies[1]));
