@@ -33,6 +33,8 @@ function App(props) {
   const [selectedProficiencies, setSelectedProficiencies] = useState([]);
   const [proficiencyAmount, setProficiencyAmount] = useState(0);
 
+  const [statsLabel, setStatsLabel] = useState("");
+
   useEffect(() => {
     getRaces();
     getClasses();
@@ -141,6 +143,12 @@ function App(props) {
       newValues.push(text);
     }
     setRolledValues(newValues);
+    setStatsLabel("These are the stats you rolled");
+  }
+
+  function standardArray() {
+    setRolledValues([15, 14, 13, 12, 10, 8]);
+    setStatsLabel("This is your standard array");
   }
 
   async function getProficiencies(selectedClass) {
@@ -374,13 +382,14 @@ function App(props) {
         <div style={{ marginTop: '20px' }}></div>
 
         {rolledValues.length == 0 && (
-          <div className="middlealign">
-            <button onClick={rollStats}>Roll stats</button>
+          <div className="statButtons">
+            <button className="statButton" onClick={rollStats}>Roll stats</button>
+            <button className = "statButton" onClick={standardArray}>Standard Array</button>
           </div>
         )}
         {rolledValues.length > 0 && (
           <div>
-            <label className="middlealign">These are the stats you rolled</label>
+            <label className="middlealign">{statsLabel}</label>
             <label className="middlealign">Distribute these over your stats as you see fit</label>
 
             <div style={{ marginTop: '10px' }}></div>
